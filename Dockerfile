@@ -26,4 +26,5 @@ COPY --from=build /app/target/x86_64-unknown-linux-gnu/release/eq-ala /app/eq-al
 COPY --from=build /app/config /app/config
 # COPY --from=build /app/.env_docker /app/.env
 COPY --from=build /app/.env /app/.env
+RUN chmod +x /app/eq-ala
 CMD ["./eq-ala"]
