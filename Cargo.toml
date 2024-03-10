@@ -26,3 +26,5 @@ debug = false       # Strip debug symbols from the binary.
 [profile.dev]
 debug = true
 
+[target.'cfg(target_os = "linux")'.dependencies]
+reqwest = { version = "0.11.25", default-features = false, features = ["rustls-tls"] }

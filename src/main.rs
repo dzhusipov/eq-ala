@@ -11,6 +11,7 @@ async fn main() {
     check_eq(bot).await;
 }
 
+#[allow(dead_code)]
 async fn send_reply(bot: Bot, msg: Message) {
 
     let text_message = msg.text().unwrap();
@@ -37,6 +38,7 @@ async fn create_chat_table() {
     conn.close().unwrap();
 }
 
+#[allow(dead_code)]
 async fn save_chat_db(chat_id: ChatId) {
     let conn = rusqlite::Connection::open("db.sqlite").unwrap();
     create_chat_table().await;
@@ -76,6 +78,7 @@ async fn chech_for_eq(bot: Bot) {
     let magnitude: f64 = properties["mag"].as_f64().unwrap();
     let time: i64 = properties["time"].as_i64().unwrap();
     let time_epoch: i64 = time; // Example UNIX timestamp
+    #[allow(deprecated)]
     let date_time = Utc.timestamp(time_epoch, 0) + Duration::hours(5);
     let human_time = date_time.format("%d-%m-%Y %H:%M:%S").to_string();
 
@@ -115,6 +118,7 @@ async fn save_eq_db(title: &str, magnitude: f64, time: i64) -> i8 {
         [],
     );
     let time_epoch: i64 = time; // Example UNIX timestamp
+    #[allow(deprecated)]
     let date_time = Utc.timestamp(time_epoch, 0) + Duration::hours(5);
     let human_time = date_time.format("%d-%m-%Y %H:%M:%S").to_string();
     

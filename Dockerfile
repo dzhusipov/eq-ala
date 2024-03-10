@@ -14,17 +14,18 @@ RUN apt-get update && apt-get install -y musl-tools libssl-dev
 RUN cargo build --release --target x86_64-unknown-linux-gnu
 # RUN ls -la /app/target/x86_64-unknown-linux-gnu/release
 # RUN cargo build --release --target aarch64-unknown-linux-musl
-
+CMD ["/app/target/x86_64-unknown-linux-gnu/release/eq-ala"]
 # FROM debian:bullseye-slim
 # FROM alpine:latest
 
-FROM scratch
-WORKDIR /app
-# COPY --from=build /app/target/release/zhus_sip /app/zhus_sip
-COPY --from=build /app/target/x86_64-unknown-linux-gnu/release/eq-ala /app/eq-ala
-# COPY --from=build /app/target/aarch64-unknown-linux-musl/release/eq-ala /app/eq-ala
-COPY --from=build /app/config /app/config
-# COPY --from=build /app/.env_docker /app/.env
-COPY --from=build /app/.env /app/.env
-RUN chmod +x /app/eq-ala
-CMD ["./eq-ala"]
+# # FROM scratch
+# WORKDIR /app
+# RUN apk add gcompat bash openssl libgcc libstdc++ ncurses-libs 
+# # COPY --from=build /app/target/release/zhus_sip /app/zhus_sip
+# COPY --from=build /app/target/x86_64-unknown-linux-gnu/release/eq-ala /app/eq-ala
+# # COPY --from=build /app/target/aarch64-unknown-linux-musl/release/eq-ala /app/eq-ala
+# COPY --from=build /app/config /app/config
+# # COPY --from=build /app/.env_docker /app/.env
+# COPY --from=build /app/.env /app/.env
+# # RUN chmod +x /app/eq-ala
+# CMD ["/app/eq-ala"]
