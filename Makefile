@@ -14,11 +14,11 @@ build:
 	cargo build
 
 docker:
-	docker stop zhus_sip_stack || true
-	docker rm zhus_sip_stack || true
-	docker rmi zhus_sip_stack_img || true
-	docker build -t zhus_sip_stack_img .
-	docker run -d --name zhus_sip_stack -p 8080:8080 -p 5060:5060 zhus_sip_stack_img
+	docker stop eq-ala || true
+	docker rm eq-ala || true
+	docker rmi eq-ala || true
+	docker build -t eq-ala .
+	docker run -d --name eq-ala eq-ala
 
 test:
 	cargo test
