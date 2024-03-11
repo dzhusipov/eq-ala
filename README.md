@@ -8,3 +8,9 @@ echo "TELEOXIDE_TOKEN=your_token" > .env
 cargo build --release
 ./target/release/eq-ala
 ```
+
+### Docker x86-x64
+```bash
+docker build -t eq-ala -f Dockerfile.alpine . 
+docker run -d --name eq-ala eq-ala
+```
