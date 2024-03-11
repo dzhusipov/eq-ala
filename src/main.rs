@@ -8,10 +8,16 @@ async fn main() {
     log::info!("Starting bot...");
     let _ = dotenvy::dotenv();
     let bot: Bot = Bot::from_env();
-    check_eq(bot).await;
+    tokio::spawn({
+        check_eq(bot.clone())
+    });
+    // check_eq(bot).await;
+    teloxide::repl(bot, |bot: Bot, msg: Message| async move {
+        send_reply(bot, msg).await;
+        Ok(())
+    }).await
 }
 
-#[allow(dead_code)]
 async fn send_reply(bot: Bot, msg: Message) {
 
     let text_message = msg.text().unwrap();
@@ -38,7 +44,6 @@ async fn create_chat_table() {
     conn.close().unwrap();
 }
 
-#[allow(dead_code)]
 async fn save_chat_db(chat_id: ChatId) {
     let conn = rusqlite::Connection::open("db.sqlite").unwrap();
     create_chat_table().await;
@@ -84,7 +89,7 @@ async fn chech_for_eq(bot: Bot) {
 
     let result = save_eq_db(title, magnitude, time).await;
     if result == 0 {
-        log::info!("No new earthquakes");
+        // log::info!("No new earthquakes");
         return;
     }
     create_chat_table().await;
@@ -100,7 +105,7 @@ async fn chech_for_eq(bot: Bot) {
         log::info!("Sending message to chat id: {:?}", chat_id_db);
         let chat_id = ChatId(chat_id_db.unwrap().parse::<i64>().unwrap()); 
         let text = format!("New earthquake: {}\nMagnitude: {}\nTime: {}", title, magnitude, human_time);
-        bot.send_message(chat_id, text).await.unwrap();
+        let _ = bot.send_message(chat_id, text);
     }
 
 }
