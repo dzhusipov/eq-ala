@@ -47,14 +47,25 @@ async fn create_chat_table() {
 async fn save_chat_db(chat_id: ChatId) {
     let conn = rusqlite::Connection::open("db.sqlite").unwrap();
     create_chat_table().await;
-    // insert the chat id
-    conn.execute(
-        "INSERT INTO chats (chat_id) VALUES (?1)",
-        [chat_id.to_string()],
-    ).unwrap();
-    conn.close().unwrap();
-    log::info!("Chat id saved: {:?}", chat_id);
 
+    // Check if the chat_id already exists
+    let mut check_stmt = conn.prepare("SELECT COUNT(*) FROM chats WHERE chat_id = ?1").unwrap();
+    let chat_id_count: i64 = check_stmt.query_row([chat_id.to_string()], |row| row.get(0)).unwrap_or(0);
+
+    if chat_id_count == 0 {
+        // If the chat_id does not exist, insert it
+        conn.execute(
+            "INSERT INTO chats (chat_id) VALUES (?1)",
+            [chat_id.to_string()],
+        ).unwrap();
+        log::info!("Chat id saved: {:?}", chat_id);
+    } else {
+        log::info!("Chat id already exists: {:?}", chat_id);
+    }
+
+    // It's a good practice to explicitly close the connection, but it's not strictly necessary here
+    // as the connection will be closed when it goes out of scope
+    // conn.close().unwrap();
 }
 
 async fn check_eq(bot: Bot){
